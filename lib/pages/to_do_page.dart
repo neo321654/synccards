@@ -18,13 +18,21 @@ class ToDoPage extends StatelessWidget {
       drawer: AppDrawer(),
         appBar: AppBar(
 
-          title: Text(word(context).helloWorld),
+          title: Text(word(context).targetProgect),
+          centerTitle: true,
+
+
+
         ),
         body: ToDoList()
       );
   }
 
 }
+
+
+
+
 
 class ToDoList extends StatefulWidget {
   const ToDoList({Key? key}) : super(key: key);

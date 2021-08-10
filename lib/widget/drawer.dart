@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:synccards/routes/Routes.dart';
+
+import 'package:synccards/utils/utilsFunctions.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -10,17 +11,9 @@ class AppDrawer extends StatelessWidget {
         children: <Widget>[
           _createHeader(),
           _createDrawerItem(
-              icon: Icons.contacts,
-              text: 'Contacts',
-              onTap: () {}),
-          _createDrawerItem(
-              icon: Icons.event,
-              text: 'Events',
-            onTap: () {}),
-          _createDrawerItem(
-              icon: Icons.note,
-              text: 'Notes',
-              onTap: () {}),
+              icon: Icons.contacts, text: 'Contacts', onTap: () {}),
+          _createDrawerItem(icon: Icons.event, text: 'Events', onTap: () {}),
+          _createDrawerItem(icon: Icons.note, text: 'Notes', onTap: () {}),
           Divider(),
           _createDrawerItem(icon: Icons.collections_bookmark, text: 'Steps'),
           _createDrawerItem(icon: Icons.face, text: 'Authors'),
@@ -30,8 +23,10 @@ class AppDrawer extends StatelessWidget {
           Divider(),
           _createDrawerItem(icon: Icons.bug_report, text: 'Report an issue'),
           ListTile(
-            title: Text('close drawer'),
-            onTap: () {Navigator.pop(context);},
+            title: Text(word(context).closeDrawer),
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
         ],
       ),

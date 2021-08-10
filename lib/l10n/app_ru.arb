@@ -2,5 +2,9 @@
   "helloWorld": "Привет мир",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
-  }
+  },
+  "dd":"ff"
+  ,"targetProgect":"текущий проект"
+  ,"closeDrawer":"закрыть меню"
 }
+
