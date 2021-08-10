@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:synccards/widget/drawer.dart';
+import 'package:synccards/utils/utilsFunctions.dart';
+
+
+
+
+
 
 class ToDoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    print(word(context).helloWorld);
+
     return Scaffold(
       drawer: AppDrawer(),
         appBar: AppBar(
-          title: Text("Contacts"),
+
+          title: Text(word(context).helloWorld),
         ),
         body: ToDoList()
       );
