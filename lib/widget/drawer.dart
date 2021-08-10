@@ -30,8 +30,8 @@ class AppDrawer extends StatelessWidget {
           Divider(),
           _createDrawerItem(icon: Icons.bug_report, text: 'Report an issue'),
           ListTile(
-            title: Text('0.0.1'),
-            onTap: () {},
+            title: Text('close drawer'),
+            onTap: () {Navigator.pop(context);},
           ),
         ],
       ),

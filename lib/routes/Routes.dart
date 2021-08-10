@@ -1,4 +1,4 @@
-import 'package:synccards/module/contacts/contact_list_view.dart';
+import 'package:synccards/pages/to_do_page.dart';
 import 'package:synccards/module/events/event_list_view.dart';
 import 'package:synccards/module/notes/note_list_view.dart';
 
