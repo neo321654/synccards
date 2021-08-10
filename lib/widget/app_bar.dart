@@ -4,25 +4,26 @@ import 'package:flutter/material.dart';
 class FlexibleAppBar extends SliverAppBar {
   static const double height = 256.0;
 
-  FlexibleAppBar(String? title, String? imageUrl) : super(
+  FlexibleAppBar(String? title,) : super(
     pinned: true,
     expandedHeight: height,
     flexibleSpace: FlexibleSpaceBar(
         title: Text(title?? "--"),
-        background: _buildBackground(imageUrl?? "--")
+        background: _buildBackground()
         
     )
   );
 
-  static Widget _buildBackground(String imageUrl) {
+  static Widget _buildBackground() {
     return Stack (
       fit: StackFit.expand,
         children: <Widget>[
-            Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-                height: height
-            ),
+            // Image.network(
+            //     imageUrl,
+            //     fit: BoxFit.cover,
+            //     height: height
+            // ),
+        Image.asset('res/images/drawer_header_background.png'),
 
             DecoratedBox(
                 decoration: BoxDecoration(

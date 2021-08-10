@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:synccards/widget/drawer.dart';
 import 'package:synccards/utils/utilsFunctions.dart';
+import 'package:synccards/widget/my_voluem_button.dart';
 
 
 
@@ -16,10 +17,12 @@ class ToDoPage extends StatelessWidget {
 
     return Scaffold(
       drawer: AppDrawer(),
-        appBar: AppBar(
+        appBar:
+        AppBar(
 
           title: Text(word(context).targetProgect),
           centerTitle: true,
+          actions: [MyVolumeButton()],
 
 
 
