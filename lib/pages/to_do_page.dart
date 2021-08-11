@@ -16,7 +16,9 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 2),
     vsync: this,
-  )..repeat(reverse: true);
+  )..repeat(
+      reverse: true,
+    );
   late final Animation<double> _animation = CurvedAnimation(
     parent: _controller,
     curve: Curves.elasticOut,
@@ -30,8 +32,6 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-
-
     super.initState();
   }
 
@@ -42,51 +42,49 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        drawer: AppDrawer(),
-        appBar: AppBar(
-          title: Column(
+          drawer: AppDrawer(),
+          appBar: AppBar(
+            title: Column(
+              children: [
+                Text(
+                  word(context).targetProgect,
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                Text(
+                  nameProject ?? word(context).nameProgect,
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+              ],
+            ),
+            centerTitle: true,
+            actions: [MyVolumeButton()],
+            bottom: TabBar(
+              tabs: [
+                Tab(
+                  icon: Icon(Icons.format_list_numbered_sharp),
+                  text: word(context).todo,
+                ),
+                Tab(
+                  icon: Icon(Icons.done),
+                  text: word(context).done,
+                ),
+              ],
+            ),
+          ),
+          body: TabBarView(
             children: [
-              Text(
-                word(context).targetProgect,
-                style: Theme.of(context).textTheme.caption,
-              ),
-              Text(
-                nameProject ?? word(context).nameProgect,
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
+              ToDoList(),
+              SlidableExample(title: "TitleExample"),
             ],
           ),
-          centerTitle: true,
-          actions: [MyVolumeButton()],
-          bottom: TabBar(
-            tabs: [
-              Tab(
-                icon: Icon(Icons.format_list_numbered_sharp),
-                text: word(context).todo,
-              ),
-              Tab(
-                icon: Icon(Icons.done),
-                text: word(context).done,
-              ),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            ToDoList(),
-            SlidableExample(title: "TitleExample"),
-          ],
-        ),
           floatingActionButton: FloatingActionButton(
             //backgroundColor: _fabColor,
-            onPressed: null,
-            child:
-                RotationTransition(
+            onPressed: () {},
+            child: RotationTransition(
               turns: _animation,
               child: Icon(Icons.add),
             ),
-          )
-      ),
+          )),
     );
   }
 }
@@ -99,52 +97,54 @@ class ToDoList extends StatefulWidget {
 }
 
 class _ToDoListState extends State<ToDoList> {
-  final items = List<String>.generate(5, (i) => "Item $i");
+  List<String> items = List<String>.generate(15, (i) => "Item $i");
+
+
+  void reorderData(int oldindex, int newindex){
+    setState(() {
+      if(newindex>oldindex){
+        newindex-=1;
+      }
+      final item = items.removeAt(oldindex);
+      items.insert(newindex, item);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return Dismissible(
-          key: Key(item),
-          child: Card(child: ListItem()),
-          direction: DismissDirection.startToEnd,
+    return ReorderableListView(
+      buildDefaultDragHandles: false,
 
-          onDismissed: (direction) {
-            // Remove the item from the data source.
 
-            print(direction);
-            if (direction == DismissDirection.endToStart) {
-              setState(() {
-                items.removeAt(index);
-              });
+        onReorder: reorderData,
+        children: [
+       //   for (final item in items)
+          for (int index = 0; index < items.length; index++)
+            Dismissible(
 
-              // Then show a snackbar.
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text('$item dismissed')));
-            }
-          },
-          background: Container(
-              alignment: Alignment.centerLeft,
-              child: Text(word(context).done),
-              color: Colors.green),
-        );
+              key: Key(items[index]),
+              child: Card(child: ListItem(index)),
+              direction: DismissDirection.startToEnd,
+              onDismissed: (direction) {
+                // Remove the item from the data source.
 
-        //   ListTile(
-        //   title: Text(items[index]),
-        // );
-      },
-    );
-    return ListView(
-      padding: const EdgeInsets.all(8),
-      children: <Widget>[
-        Card(
-          child: ListItem(),
-        ),
-      ],
-    );
+                print(direction);
+                if (direction == DismissDirection.endToStart) {
+                  setState(() {
+                    // items.removeAt(index);
+                  });
+
+                  // Then show a snackbar.
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text('$index dismissed')));
+                }
+              },
+              background: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(word(context).done),
+                  color: Colors.green),
+            )
+        ]);
   }
 }
 
