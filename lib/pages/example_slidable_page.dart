@@ -2,31 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Slidable Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Slidable Demo'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+class SlidableExample extends StatefulWidget {
+  SlidableExample({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _SlidableExampleState createState() => _SlidableExampleState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _SlidableExampleState extends State<SlidableExample> {
   late final SlidableController slidableController;
   final List<_HomeItem> items = List.generate(
     20,

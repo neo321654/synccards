@@ -4,16 +4,34 @@ import 'package:synccards/utils/utilsFunctions.dart';
 import 'package:synccards/widget/list_item.dart';
 import 'package:synccards/widget/my_voluem_button.dart';
 
+import 'example_slidable_page.dart';
+
 class ToDoPage extends StatefulWidget {
   @override
   _ToDoPageState createState() => _ToDoPageState();
 }
 
-class _ToDoPageState extends State<ToDoPage> {
+class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
   String? nameProject;
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(seconds: 2),
+    vsync: this,
+  )..repeat(reverse: true);
+  late final Animation<double> _animation = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.elasticOut,
+  );
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
+
+
     super.initState();
   }
 
@@ -56,11 +74,18 @@ class _ToDoPageState extends State<ToDoPage> {
         body: TabBarView(
           children: [
             ToDoList(),
-            Center(
-                child: Text("Transit",
-                    style: Theme.of(context).textTheme.headline2)),
+            SlidableExample(title: "TitleExample"),
           ],
         ),
+          floatingActionButton: FloatingActionButton(
+            //backgroundColor: _fabColor,
+            onPressed: null,
+            child:
+                RotationTransition(
+              turns: _animation,
+              child: Icon(Icons.add),
+            ),
+          )
       ),
     );
   }
@@ -85,17 +110,26 @@ class _ToDoListState extends State<ToDoList> {
         return Dismissible(
           key: Key(item),
           child: Card(child: ListItem()),
+          direction: DismissDirection.startToEnd,
+
           onDismissed: (direction) {
             // Remove the item from the data source.
-            setState(() {
-              items.removeAt(index);
-            });
 
-            // Then show a snackbar.
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text('$item dismissed')));
+            print(direction);
+            if (direction == DismissDirection.endToStart) {
+              setState(() {
+                items.removeAt(index);
+              });
+
+              // Then show a snackbar.
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text('$item dismissed')));
+            }
           },
-          background: Container(child:Text("delete"),color: Colors.red),
+          background: Container(
+              alignment: Alignment.centerLeft,
+              child: Text(word(context).done),
+              color: Colors.green),
         );
 
         //   ListTile(
