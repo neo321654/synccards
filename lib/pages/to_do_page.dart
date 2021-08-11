@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:synccards/widget/drawer.dart';
 import 'package:synccards/utils/utilsFunctions.dart';
+import 'package:synccards/widget/list_item.dart';
 import 'package:synccards/widget/my_voluem_button.dart';
 
 class ToDoPage extends StatefulWidget {
@@ -41,17 +42,23 @@ class _ToDoPageState extends State<ToDoPage> {
           actions: [MyVolumeButton()],
           bottom: TabBar(
             tabs: [
-              Tab(icon: Icon(Icons.format_list_numbered_sharp),text: word(context).todo,),
-              Tab(icon: Icon(Icons.done),text: word(context).done,),
-
+              Tab(
+                icon: Icon(Icons.format_list_numbered_sharp),
+                text: word(context).todo,
+              ),
+              Tab(
+                icon: Icon(Icons.done),
+                text: word(context).done,
+              ),
             ],
           ),
         ),
         body: TabBarView(
           children: [
             ToDoList(),
-            Center(child: Text("Transit", style: Theme.of(context).textTheme.headline2)),
-
+            Center(
+                child: Text("Transit",
+                    style: Theme.of(context).textTheme.headline2)),
           ],
         ),
       ),
@@ -67,9 +74,43 @@ class ToDoList extends StatefulWidget {
 }
 
 class _ToDoListState extends State<ToDoList> {
+  final items = List<String>.generate(5, (i) => "Item $i");
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return Dismissible(
+          key: Key(item),
+          child: Card(child: ListItem()),
+          onDismissed: (direction) {
+            // Remove the item from the data source.
+            setState(() {
+              items.removeAt(index);
+            });
+
+            // Then show a snackbar.
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text('$item dismissed')));
+          },
+          background: Container(child:Text("delete"),color: Colors.red),
+        );
+
+        //   ListTile(
+        //   title: Text(items[index]),
+        // );
+      },
+    );
+    return ListView(
+      padding: const EdgeInsets.all(8),
+      children: <Widget>[
+        Card(
+          child: ListItem(),
+        ),
+      ],
+    );
   }
 }
 
