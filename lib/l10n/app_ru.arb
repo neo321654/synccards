@@ -6,5 +6,8 @@
   "dd":"ff"
   ,"targetProgect":"текущий проект"
   ,"closeDrawer":"закрыть меню"
+  ,"nameProgect":"название проекта"
+  ,"todo":"надо сделать"
+  ,"done":"сделано"
 }
 

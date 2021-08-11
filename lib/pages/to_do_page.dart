@@ -3,39 +3,61 @@ import 'package:synccards/widget/drawer.dart';
 import 'package:synccards/utils/utilsFunctions.dart';
 import 'package:synccards/widget/my_voluem_button.dart';
 
+class ToDoPage extends StatefulWidget {
+  @override
+  _ToDoPageState createState() => _ToDoPageState();
+}
 
+class _ToDoPageState extends State<ToDoPage> {
+  String? nameProject;
 
-
-
-
-class ToDoPage extends StatelessWidget {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-
     print(word(context).helloWorld);
 
-    return Scaffold(
-      drawer: AppDrawer(),
-        appBar:
-        AppBar(
-
-          title: Text(word(context).targetProgect),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        drawer: AppDrawer(),
+        appBar: AppBar(
+          title: Column(
+            children: [
+              Text(
+                word(context).targetProgect,
+                style: Theme.of(context).textTheme.caption,
+              ),
+              Text(
+                nameProject ?? word(context).nameProgect,
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+            ],
+          ),
           centerTitle: true,
           actions: [MyVolumeButton()],
+          bottom: TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.format_list_numbered_sharp),text: word(context).todo,),
+              Tab(icon: Icon(Icons.done),text: word(context).done,),
 
-
-
+            ],
+          ),
         ),
-        body: ToDoList()
-      );
+        body: TabBarView(
+          children: [
+            ToDoList(),
+            Center(child: Text("Transit", style: Theme.of(context).textTheme.headline2)),
+
+          ],
+        ),
+      ),
+    );
   }
-
 }
-
-
-
-
 
 class ToDoList extends StatefulWidget {
   const ToDoList({Key? key}) : super(key: key);
