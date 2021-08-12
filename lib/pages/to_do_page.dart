@@ -4,6 +4,7 @@ import 'package:synccards/utils/utilsFunctions.dart';
 import 'package:synccards/widget/list_item.dart';
 import 'package:synccards/widget/my_voluem_button.dart';
 
+import 'detail_item_page.dart';
 import 'example_slidable_page.dart';
 
 class ToDoPage extends StatefulWidget {
@@ -123,15 +124,23 @@ class _ToDoListState extends State<ToDoList> {
               // child: ListItem(index: index,),
               child: SizedBox(
                 child: Card(
+                  elevation:3,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Center(
-                          child: IconButton(
-                            color: Colors.blue,
-                            icon: Icon(Icons.edit),
-                            onPressed: () {},
+                          child: Hero(
+                            tag: "iconHero",
+                            child: IconButton(
+                              color: Colors.blue,
+                              icon: Icon(Icons.edit),
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                  return const DetailItemPage();
+                                }));
+                              },
+                            ),
                           ),
                         ),
                         Expanded(
@@ -178,7 +187,10 @@ class _ToDoListState extends State<ToDoList> {
               },
               background: Container(
                   alignment: Alignment.centerLeft,
-                  child: Text(word(context).done),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("${word(context).done.toUpperCase()} !!!" ,style: TextStyle(fontSize:18,fontWeight: FontWeight.bold,)),
+                  ),
                   color: Colors.green),
             )
         ]);
