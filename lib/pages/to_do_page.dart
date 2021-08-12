@@ -97,13 +97,12 @@ class ToDoList extends StatefulWidget {
 }
 
 class _ToDoListState extends State<ToDoList> {
-  List<String> items = List<String>.generate(15, (i) => "Item $i");
+  List<String> items = List<String>.generate(7, (i) => "Item $i");
 
-
-  void reorderData(int oldindex, int newindex){
+  void reorderData(int oldindex, int newindex) {
     setState(() {
-      if(newindex>oldindex){
-        newindex-=1;
+      if (newindex > oldindex) {
+        newindex -= 1;
       }
       final item = items.removeAt(oldindex);
       items.insert(newindex, item);
@@ -113,17 +112,55 @@ class _ToDoListState extends State<ToDoList> {
   @override
   Widget build(BuildContext context) {
     return ReorderableListView(
-      buildDefaultDragHandles: false,
-
-
+        buildDefaultDragHandles: false,
         onReorder: reorderData,
         children: [
-       //   for (final item in items)
+          //   for (final item in items)
           for (int index = 0; index < items.length; index++)
             Dismissible(
-
               key: Key(items[index]),
-              child: Card(child: ListItem(index)),
+
+              // child: ListItem(index: index,),
+              child: SizedBox(
+                child: Card(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: IconButton(
+                            color: Colors.blue,
+                            icon: Icon(Icons.edit),
+                            onPressed: () {},
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text("The battery is full.",
+                                  style:
+                                      Theme.of(context).textTheme.bodyText1),
+                              Text(
+                                  "The battery is full The battery is full.The battery is full.The battery is full.",
+                                  style:
+                                      Theme.of(context).textTheme.headline6),
+                            ],
+                          ),
+                        ),
+                        Center(
+                          child: ReorderableDragStartListener(
+                            index: index,
+                            child: IconButton(
+                              color: Colors.blue,
+                              icon: Icon(Icons.line_weight),
+                              onPressed: () {},
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+              ),
+
               direction: DismissDirection.startToEnd,
               onDismissed: (direction) {
                 // Remove the item from the data source.
@@ -135,8 +172,8 @@ class _ToDoListState extends State<ToDoList> {
                   });
 
                   // Then show a snackbar.
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('$index dismissed')));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('$index dismissed')));
                 }
               },
               background: Container(
