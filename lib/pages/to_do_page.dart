@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:synccards/ui/listview_note.dart';
 import 'package:synccards/widget/drawer.dart';
 import 'package:synccards/utils/utilsFunctions.dart';
 import 'package:synccards/widget/list_item.dart';
@@ -75,10 +76,13 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
           body: TabBarView(
             children: [
               ToDoList(),
-              SlidableExample(title: "TitleExample"),
+              // SlidableExample(title: "TitleExample"),
+              ListViewNote(),
             ],
           ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
+
             //backgroundColor: _fabColor,
             onPressed: () {},
             child: RotationTransition(
