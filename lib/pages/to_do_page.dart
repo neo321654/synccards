@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:synccards/ui/listview_note.dart';
 import 'package:synccards/widget/drawer.dart';
 import 'package:synccards/utils/utilsFunctions.dart';
 import 'package:synccards/widget/list_item.dart';
 import 'package:synccards/widget/my_voluem_button.dart';
 
 import 'detail_item_page.dart';
-import 'example_slidable_page.dart';
 
 class ToDoPage extends StatefulWidget {
   @override
@@ -77,7 +75,7 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
             children: [
               ToDoList(),
               // SlidableExample(title: "TitleExample"),
-              ListViewNote(),
+             Text("dfdf",style:TextStyle(color:Colors.black)),
             ],
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
