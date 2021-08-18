@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:synccards/bloc/color_bloc.dart';
 import 'package:synccards/database/bloc.dart';
 import 'package:synccards/widget/drawer.dart';
 import 'package:synccards/utils/utilsFunctions.dart';
@@ -8,6 +10,7 @@ import 'package:synccards/widget/moor/homescreen.dart';
 import 'package:synccards/widget/my_voluem_button.dart';
 
 import 'detail_item_page.dart';
+import 'flutter_bloc_page.dart';
 
 class ToDoPage extends StatefulWidget {
   @override
@@ -78,18 +81,12 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
             children: [
               ToDoList(),
               // SlidableExample(title: "TitleExample"),
-              Provider<TodoAppBloc>(
-                create: (_) => TodoAppBloc(),
-                dispose: (_, bloc) => bloc.close(),
-                child: MaterialApp(
-                  title: 'moor Demo',
-                  theme: ThemeData(
-                    primarySwatch: Colors.orange,
-                    typography: Typography.material2018(),
-                  ),
-                  home: HomeScreen(),
-                ),
-              ),
+           // HomeScreenMoor(),
+              BlocProvider<ColorBloc>(
+                  create: (context)=> ColorBloc(Colors.red),
+                  child: FlutterBlocPage())
+
+
             ],
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
