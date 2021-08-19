@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:synccards/bloc/color_bloc.dart';
+import 'package:synccards/model/bloc/user_bloc.dart';
+import 'package:synccards/services/user_repository.dart';
 import 'package:synccards/widget/blocExample/action_buttons.dart';
 import 'package:synccards/widget/blocExample/user_list.dart';
 
@@ -11,7 +13,13 @@ class FlutterBlocPage extends StatelessWidget {
   Widget build(BuildContext context) {
     ColorBloc _bloc = BlocProvider.of<ColorBloc>(context);
 
-    return Scaffold(
+    UsersRepository usersRepository = UsersRepository();
+
+    return BlocProvider<UserBloc>(create: (context){
+      return UserBloc(usersRepository: usersRepository);
+
+    },
+    child: Scaffold(
       appBar: AppBar(
         title: Text("flutter bloc"),
         centerTitle: true,
@@ -56,6 +64,9 @@ class FlutterBlocPage extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
+
+
   }
 }
