@@ -7,7 +7,8 @@ import 'package:http/http.dart' as http;
 class UserProvider {
   Future <List<User>> getUser() async {
     final response = await http.get(
-        Uri.parse("https://jsonplaceholder.typicode.com/users"));
+        // Uri.parse("https://jsonplaceholder.typicode.com/users"));
+        Uri.parse("https://api.github.com/repos/neo321654/synccards/issues"));
 
     if (response.statusCode==200) {
       final List<dynamic> userJson = json.decode(response.body);
