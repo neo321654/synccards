@@ -14,14 +14,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (event is UserLoadEvent) {
       yield UserLoadingState();
       try {
+        print("catch 17");
         final List<User> _loadedUserList = await usersRepository.getAllUsers();
+        print("catch 18");
         yield UserLoadedState(loadedUser: _loadedUserList);
       } catch (E) {
+        print("catch 20");
         print(E.toString());
         yield UserErrorState();
       }
     }else if (event is UserClearEvent){
       yield UserEmptyState();
+    }else if(event is UserAddIssue){
+      usersRepository.addIssue();
     }
   }
 }

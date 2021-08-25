@@ -29,6 +29,16 @@ class ActionButtons extends StatelessWidget {
           child: Text("Clear"),
           color: Colors.red,
         ),
+        SizedBox(
+          width: 8,
+        ),
+        MaterialButton(
+          onPressed: () {
+            userBloc.add(UserAddIssue());
+          },
+          child: Text("Add"),
+          color: Colors.blue,
+        ),
       ],
     );
   }
