@@ -111,15 +111,15 @@ class ToDoList extends StatefulWidget {
 }
 
 class _ToDoListState extends State<ToDoList> {
-  List<String> items = List<String>.generate(7, (i) => "Item $i");
+  List<String> tasksList = List<String>.generate(7, (i) => "Item $i");
 
   void reorderData(int oldindex, int newindex) {
     setState(() {
       if (newindex > oldindex) {
         newindex -= 1;
       }
-      final item = items.removeAt(oldindex);
-      items.insert(newindex, item);
+      final item = tasksList.removeAt(oldindex);
+      tasksList.insert(newindex, item);
     });
   }
 
@@ -130,9 +130,9 @@ class _ToDoListState extends State<ToDoList> {
         onReorder: reorderData,
         children: [
           //   for (final item in items)
-          for (int index = 0; index < items.length; index++)
+          for (int index = 0; index < tasksList.length; index++)
             Dismissible(
-              key: Key(items[index]),
+              key: Key(tasksList[index]),
 
               // child: ListItem(index: index,),
               child: SizedBox(

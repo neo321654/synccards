@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:synccards/model/bloc/user.dart';
+import 'package:synccards/model/bloc/task.dart';
 import 'package:synccards/model/bloc/user_event.dart';
 import 'package:synccards/model/bloc/user_state.dart';
 import 'package:synccards/services/user_repository.dart';
@@ -14,12 +14,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (event is UserLoadEvent) {
       yield UserLoadingState();
       try {
-        print("catch 17");
-        final List<User> _loadedUserList = await usersRepository.getAllUsers();
-        print("catch 18");
+
+        final List<Task> _loadedUserList = await usersRepository.getMockUsers();
+
         yield UserLoadedState(loadedUser: _loadedUserList);
       } catch (E) {
-        print("catch 20");
         print(E.toString());
         yield UserErrorState();
       }

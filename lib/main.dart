@@ -4,7 +4,6 @@ import 'pages/to_do_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
-
   runApp(new MaterialApp(
     debugShowCheckedModeBanner: false,
     localizationsDelegates: [
@@ -24,7 +23,7 @@ void main() {
     theme: ThemeData(
         primarySwatch: Colors.indigo,
         textTheme: TextTheme(
-            // center text style
+          // center text style
             caption: TextStyle(color: Colors.white),
             // Side text style
             bodyText2: TextStyle(color: Colors.white))),

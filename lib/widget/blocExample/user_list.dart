@@ -36,10 +36,10 @@ class UserList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                            "${state.loadedUser[index].email}",
+                            "${state.loadedUser[index].description}",
                             style: TextStyle(fontStyle: FontStyle.italic)),
                         Text(
-                          "${state.loadedUser[index].phone}",
+                          "${state.loadedUser[index].additionalDescription}",
                           style: TextStyle(fontStyle: FontStyle.italic),
                         ),
                       ],
