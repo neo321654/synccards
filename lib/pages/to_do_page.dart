@@ -83,26 +83,24 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
           ),
           body: TabBarView(
             children: [
-           BlocProvider<UserBloc>(
-          create: (context){
-      UsersRepository usersRepository = UsersRepository();
-      return UserBloc(usersRepository: usersRepository);
-      },
-        child: ToDoList(),
-      ),
+              BlocProvider<UserBloc>(
+                create: (context) {
+                  UsersRepository usersRepository = UsersRepository();
+                  return UserBloc(usersRepository: usersRepository);
+                },
+                child: ToDoList(),
+              ),
 
               // SlidableExample(title: "TitleExample"),
-           // HomeScreenMoor(),
+              // HomeScreenMoor(),
               BlocProvider<ColorBloc>(
-                  create: (context)=> ColorBloc(Colors.red),
+                  create: (context) => ColorBloc(Colors.red),
                   child: FlutterBlocPage())
-
-
             ],
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
-
             //backgroundColor: _fabColor,
             onPressed: () {},
             child: RotationTransition(
@@ -122,9 +120,7 @@ class ToDoList extends StatefulWidget {
 }
 
 class _ToDoListState extends State<ToDoList> {
-
-
-  List tasksList =[];
+  List tasksList = [];
 
   void reorderData(int oldindex, int newindex) {
     setState(() {
@@ -140,11 +136,10 @@ class _ToDoListState extends State<ToDoList> {
   Widget build(BuildContext context) {
     final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
 
-    return BlocBuilder<UserBloc,UserState>(builder: (context,state){
-
-      if(state is UserLoadedState){
+    return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+      if (state is UserLoadedState) {
         tasksList = state.loadedUser;
-        print("${ tasksList.toString()}");
+        print("${tasksList.toString()}");
 
         return ReorderableListView(
             buildDefaultDragHandles: false,
@@ -156,7 +151,7 @@ class _ToDoListState extends State<ToDoList> {
                   key: Key(tasksList[index].id.toString()),
                   child: SizedBox(
                     child: Card(
-                      elevation:3,
+                      elevation: 3,
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -168,7 +163,8 @@ class _ToDoListState extends State<ToDoList> {
                                   color: Colors.blue,
                                   icon: Icon(Icons.edit),
                                   onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
                                       return const DetailItemPage();
                                     }));
                                   },
@@ -178,13 +174,15 @@ class _ToDoListState extends State<ToDoList> {
                             Expanded(
                               child: Column(
                                 children: [
-                                  Text("${tasksList[index].name}",
-                                      style:
-                                      Theme.of(context).textTheme.bodyText1),
                                   Text(
-                                      "${tasksList[index].description}",
-                                      style:
-                                      Theme.of(context).textTheme.headline6),
+                                      "${tasksList[index].name}  order: ${tasksList[index].order} ",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1),
+                                  Text("${tasksList[index].description}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6),
                                 ],
                               ),
                             ),
@@ -206,8 +204,12 @@ class _ToDoListState extends State<ToDoList> {
                     if (direction == DismissDirection.startToEnd) {
                       setState(() {
                         tasksList.removeAt(index);
-                      });
 
+                       // tasksList[index].order--;
+                         for (int i = index; i < tasksList.length; i++){
+                           tasksList[i].order--;
+                         }
+                      });
 
                       // Then show a snackbar.
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -218,136 +220,26 @@ class _ToDoListState extends State<ToDoList> {
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text("${word(context).done.toUpperCase()} !!!" ,style: TextStyle(fontSize:18,fontWeight: FontWeight.bold,)),
+                        child: Text("${word(context).done.toUpperCase()} !!!",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            )),
                       ),
                       color: Colors.green),
                 )
             ]);
-        return   ListView.builder(
-          itemCount: state.loadedUser.length,
-          itemBuilder: (context, index) {
-            return Container(
-              color: index % 2 == 0 ? Colors.yellow : Colors.green,
-
-              child: ListTile(
-                leading: Text(
-                  "${state.loadedUser[index].id}", style: Theme.of(context).textTheme.bodyText1,
-                ),
-                title: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("${state.loadedUser[index].name}"),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                            "${state.loadedUser[index].description}",
-                            style: TextStyle(fontStyle: FontStyle.italic)),
-                        Text(
-                          "${state.loadedUser[index].additionalDescription}",
-                          style: TextStyle(fontStyle: FontStyle.italic),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            );
-          },
-        );
       }
 
-      if(state is UserLoadingState ){
+      if (state is UserLoadingState) {
         userBloc.add(UserLoadEvent());
 
-        return Center(child: CircularProgressIndicator(),);
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       }
 
       return Center();
     });
-
-    return ReorderableListView(
-        buildDefaultDragHandles: false,
-        onReorder: reorderData,
-        children: [
-          //   for (final item in items)
-          for (int index = 0; index < tasksList.length; index++)
-            Dismissible(
-              key: Key(tasksList[index]),
-
-              // child: ListItem(index: index,),
-              child: SizedBox(
-                child: Card(
-                  elevation:3,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Hero(
-                            tag: "iconHero",
-                            child: IconButton(
-                              color: Colors.blue,
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                  return const DetailItemPage();
-                                }));
-                              },
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text("The battery is full.",
-                                  style:
-                                      Theme.of(context).textTheme.bodyText1),
-                              Text(
-                                  "The battery is full The battery is full.The battery is full.The battery is full.",
-                                  style:
-                                      Theme.of(context).textTheme.headline6),
-                            ],
-                          ),
-                        ),
-                        Center(
-                          child: ReorderableDragStartListener(
-                            index: index,
-                            child: IconButton(
-                              color: Colors.blue,
-                              icon: Icon(Icons.line_weight),
-                              onPressed: () {},
-                            ),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-
-              direction: DismissDirection.startToEnd,
-              onDismissed: (direction) {
-                // Remove the item from the data source.
-
-                print(direction);
-                if (direction == DismissDirection.endToStart) {
-                  setState(() {
-                    // items.removeAt(index);
-                  });
-
-                  // Then show a snackbar.
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('$index dismissed')));
-                }
-              },
-              background: Container(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("${word(context).done.toUpperCase()} !!!" ,style: TextStyle(fontSize:18,fontWeight: FontWeight.bold,)),
-                  ),
-                  color: Colors.green),
-            )
-        ]);
   }
 }
-
