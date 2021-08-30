@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:synccards/model/bloc/user_bloc.dart';
 import 'package:synccards/model/bloc/user_state.dart';
 
-class UserList extends StatelessWidget {
-  const UserList({Key? key}) : super(key: key);
+class TodoList extends StatelessWidget {
+  const TodoList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

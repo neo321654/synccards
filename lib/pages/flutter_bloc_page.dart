@@ -15,9 +15,9 @@ class FlutterBlocPage extends StatelessWidget {
 
     UsersRepository usersRepository = UsersRepository();
 
-    return BlocProvider<UserBloc>(create: (context){
+    return BlocProvider<UserBloc>(
+      create: (context){
       return UserBloc(usersRepository: usersRepository);
-
     },
     child: Scaffold(
       appBar: AppBar(

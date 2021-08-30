@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:synccards/bloc/color_bloc.dart';
 import 'package:synccards/database/bloc.dart';
+import 'package:synccards/model/bloc/user_bloc.dart';
+import 'package:synccards/model/bloc/user_event.dart';
+import 'package:synccards/model/bloc/user_state.dart';
+import 'package:synccards/services/user_repository.dart';
 import 'package:synccards/widget/drawer.dart';
 import 'package:synccards/utils/utilsFunctions.dart';
 import 'package:synccards/widget/list_item.dart';
@@ -79,7 +83,14 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
           ),
           body: TabBarView(
             children: [
-              ToDoList(),
+           BlocProvider<UserBloc>(
+          create: (context){
+      UsersRepository usersRepository = UsersRepository();
+      return UserBloc(usersRepository: usersRepository);
+      },
+        child: ToDoList(),
+      ),
+
               // SlidableExample(title: "TitleExample"),
            // HomeScreenMoor(),
               BlocProvider<ColorBloc>(
@@ -111,7 +122,9 @@ class ToDoList extends StatefulWidget {
 }
 
 class _ToDoListState extends State<ToDoList> {
-  List<String> tasksList = List<String>.generate(7, (i) => "Item $i");
+
+
+  List tasksList =[];
 
   void reorderData(int oldindex, int newindex) {
     setState(() {
@@ -125,6 +138,134 @@ class _ToDoListState extends State<ToDoList> {
 
   @override
   Widget build(BuildContext context) {
+    final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+
+    return BlocBuilder<UserBloc,UserState>(builder: (context,state){
+
+      if(state is UserLoadedState){
+        tasksList = state.loadedUser;
+        print("${ tasksList.toString()}");
+
+        return ReorderableListView(
+            buildDefaultDragHandles: false,
+            onReorder: reorderData,
+            children: [
+              //   for (final item in items)
+              for (int index = 0; index < tasksList.length; index++)
+                Dismissible(
+                  key: Key(tasksList[index].id.toString()),
+                  child: SizedBox(
+                    child: Card(
+                      elevation:3,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Hero(
+                                tag: "iconHero",
+                                child: IconButton(
+                                  color: Colors.blue,
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                      return const DetailItemPage();
+                                    }));
+                                  },
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Text("${tasksList[index].name}",
+                                      style:
+                                      Theme.of(context).textTheme.bodyText1),
+                                  Text(
+                                      "${tasksList[index].description}",
+                                      style:
+                                      Theme.of(context).textTheme.headline6),
+                                ],
+                              ),
+                            ),
+                            Center(
+                              child: ReorderableDragStartListener(
+                                index: index,
+                                child: IconButton(
+                                  color: Colors.blue,
+                                  icon: Icon(Icons.line_weight),
+                                  onPressed: () {},
+                                ),
+                              ),
+                            ),
+                          ]),
+                    ),
+                  ),
+                  direction: DismissDirection.startToEnd,
+                  onDismissed: (direction) {
+                    if (direction == DismissDirection.startToEnd) {
+                      setState(() {
+                        tasksList.removeAt(index);
+                      });
+
+
+                      // Then show a snackbar.
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('$index dismissed')));
+                    }
+                  },
+                  background: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("${word(context).done.toUpperCase()} !!!" ,style: TextStyle(fontSize:18,fontWeight: FontWeight.bold,)),
+                      ),
+                      color: Colors.green),
+                )
+            ]);
+        return   ListView.builder(
+          itemCount: state.loadedUser.length,
+          itemBuilder: (context, index) {
+            return Container(
+              color: index % 2 == 0 ? Colors.yellow : Colors.green,
+
+              child: ListTile(
+                leading: Text(
+                  "${state.loadedUser[index].id}", style: Theme.of(context).textTheme.bodyText1,
+                ),
+                title: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("${state.loadedUser[index].name}"),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                            "${state.loadedUser[index].description}",
+                            style: TextStyle(fontStyle: FontStyle.italic)),
+                        Text(
+                          "${state.loadedUser[index].additionalDescription}",
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      }
+
+      if(state is UserLoadingState ){
+        userBloc.add(UserLoadEvent());
+
+        return Center(child: CircularProgressIndicator(),);
+      }
+
+      return Center();
+    });
+
     return ReorderableListView(
         buildDefaultDragHandles: false,
         onReorder: reorderData,
@@ -210,105 +351,3 @@ class _ToDoListState extends State<ToDoList> {
   }
 }
 
-// class ContactList extends StatefulWidget{
-//   ContactList({ Key? key }) : super(key: key);
-//
-//   @override
-//   _ContactListState createState() => _ContactListState();
-// }
-//
-//
-// class _ContactListState extends State<ContactList> implements ContactListViewContract {
-//
-//   late ContactListPresenter  _presenter;
-//
-//   late List<Contact> _contacts;
-//
-//   late bool _isSearching;
-//
-//   _ContactListState() {
-//     _presenter =  ContactListPresenter(this);
-//   }
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _isSearching = true;
-//     _presenter.loadContacts();
-//   }
-//
-//
-//   @override
-//   void onLoadContactsComplete(List<Contact> items) {
-//
-//     setState(() {
-//       _contacts = items;
-//       _isSearching = false;
-//     });
-//
-//   }
-//
-//   @override
-//   void onLoadContactsError() {
-//     // TODO: implement onLoadContactsError
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//
-//     var widget;
-//
-//     if(_isSearching) {
-//       widget = Center(
-//         child: Padding(
-//           padding: EdgeInsets.only(left: 16.0, right: 16.0),
-//           child: CircularProgressIndicator()
-//         )
-//       );
-//     }else {
-//       widget = ListView(
-//             padding: EdgeInsets.symmetric(vertical: 8.0),
-//             children: _buildContactList()
-//           );
-//     }
-//
-//     return widget;
-//   }
-//
-//   List<_ContactListItem> _buildContactList() {
-//     return _contacts.map((contact) =>
-//                           new _ContactListItem (
-//                             contact: contact,
-//                             onTap: () { _showContactPage(context, contact); }
-//                           ))
-//                     .toList();
-//   }
-//
-//   void _showContactPage(BuildContext context, Contact contact) {
-//     Navigator.push(context, new MaterialPageRoute<Null>(
-//       settings: const RouteSettings(name: ContactPage.routeName),
-//       builder: (BuildContext context) => new ContactPage(contact)
-//     ));
-//   }
-//
-// }
-//
-//
-// ///
-// ///   Contact List Item
-// ///
-//
-// class _ContactListItem extends ListTile {
-//
-//   _ContactListItem({ required Contact contact,
-//                      required GestureTapCallback onTap}) :
-//     super(
-//       title : Text(contact.fullName ?? "--"),
-//       subtitle: Text(contact.email ?? "--"),
-//       leading: CircleAvatar(
-//         child: Text(contact.fullName![0])
-//       ),
-//       onTap: onTap
-//     );
-//
-// }

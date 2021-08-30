@@ -7,14 +7,15 @@ import 'package:synccards/services/user_repository.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   final UsersRepository usersRepository;
 
-  UserBloc({required this.usersRepository}) : super(UserEmptyState());
+
+
+  UserBloc({required this.usersRepository}) : super(UserLoadingState());
 
   @override
   Stream<UserState> mapEventToState(UserEvent event) async* {
     if (event is UserLoadEvent) {
       yield UserLoadingState();
       try {
-
         final List<Task> _loadedUserList = await usersRepository.getMockUsers();
 
         yield UserLoadedState(loadedUser: _loadedUserList);

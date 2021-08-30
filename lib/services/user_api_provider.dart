@@ -24,7 +24,7 @@ class UserProvider {
   }
   Future <List<Task>> getMockUsers()async{
 
-    return new List<Task>.generate(10, (i) => Task(id: i,description: "description description description description $i",name: "task name $i", additionalDescription: "additionalDescription additionalDescription additionalDescription $i"));
+    return new List<Task>.generate(20, (i) => Task(id: i,description: "description description description description $i",name: "task name $i", additionalDescription: "additionalDescription additionalDescription additionalDescription $i"));
 
 
   }
