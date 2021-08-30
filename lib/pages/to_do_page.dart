@@ -123,11 +123,34 @@ class _ToDoListState extends State<ToDoList> {
   List tasksList = [];
 
   void reorderData(int oldindex, int newindex) {
+
+
+
     setState(() {
       if (newindex > oldindex) {
         newindex -= 1;
       }
+      print("oldindex : $oldindex" );
+      print("newindex : $newindex" );
+
+      if(newindex > oldindex){
+        for(int i = oldindex+1; i<newindex; i++){
+          print("between : ${tasksList[i].order}" );
+        }
+      }else{
+        for(int i = oldindex-1; i>newindex; i--){
+          print("between : ${tasksList[i].order}" );
+      }}
+
+
+
+
+      int oldInt =tasksList[oldindex].order;
+      tasksList[oldindex].order = tasksList[newindex].order;
+      tasksList[newindex].order = oldInt;
+
       final item = tasksList.removeAt(oldindex);
+    //  item.order = tasksList[newindex].order;
       tasksList.insert(newindex, item);
     });
   }
@@ -139,7 +162,7 @@ class _ToDoListState extends State<ToDoList> {
     return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
       if (state is UserLoadedState) {
         tasksList = state.loadedUser;
-        print("${tasksList.toString()}");
+        print("список перерисовался");
 
         return ReorderableListView(
             buildDefaultDragHandles: false,
