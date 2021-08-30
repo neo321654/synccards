@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:synccards/bloc/color_bloc.dart';
-import 'package:synccards/database/bloc.dart';
 import 'package:synccards/model/bloc/user_bloc.dart';
 import 'package:synccards/model/bloc/user_event.dart';
 import 'package:synccards/model/bloc/user_state.dart';
@@ -10,7 +9,6 @@ import 'package:synccards/services/user_repository.dart';
 import 'package:synccards/widget/drawer.dart';
 import 'package:synccards/utils/utilsFunctions.dart';
 import 'package:synccards/widget/list_item.dart';
-import 'package:synccards/widget/moor/homescreen.dart';
 import 'package:synccards/widget/my_voluem_button.dart';
 
 import 'detail_item_page.dart';
@@ -50,7 +48,7 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
     print(word(context).helloWorld);
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
           drawer: AppDrawer(),
           appBar: AppBar(
@@ -75,6 +73,10 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
                   text: word(context).todo,
                 ),
                 Tab(
+                  icon: Icon(Icons.gavel),
+                  text: word(context).inprocess,
+                ),
+                Tab(
                   icon: Icon(Icons.done),
                   text: word(context).done,
                 ),
@@ -83,6 +85,13 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
           ),
           body: TabBarView(
             children: [
+              BlocProvider<UserBloc>(
+                create: (context) {
+                  UsersRepository usersRepository = UsersRepository();
+                  return UserBloc(usersRepository: usersRepository);
+                },
+                child: ToDoList(),
+              ),
               BlocProvider<UserBloc>(
                 create: (context) {
                   UsersRepository usersRepository = UsersRepository();
@@ -119,39 +128,25 @@ class ToDoList extends StatefulWidget {
   _ToDoListState createState() => _ToDoListState();
 }
 
-class _ToDoListState extends State<ToDoList> {
+class _ToDoListState extends State<ToDoList> with AutomaticKeepAliveClientMixin {
   List tasksList = [];
 
   void reorderData(int oldindex, int newindex) {
-
-
-
     setState(() {
       if (newindex > oldindex) {
         newindex -= 1;
       }
-      print("oldindex : $oldindex" );
-      print("newindex : $newindex" );
-
-      if(newindex > oldindex){
-        for(int i = oldindex+1; i<newindex; i++){
-          print("between : ${tasksList[i].order}" );
-        }
-      }else{
-        for(int i = oldindex-1; i>newindex; i--){
-          print("between : ${tasksList[i].order}" );
-      }}
-
-
-
-
-      int oldInt =tasksList[oldindex].order;
+      int oldInt = tasksList[oldindex].order;
       tasksList[oldindex].order = tasksList[newindex].order;
-      tasksList[newindex].order = oldInt;
+      tasksList[newindex].order = oldInt++;
 
       final item = tasksList.removeAt(oldindex);
-    //  item.order = tasksList[newindex].order;
+
       tasksList.insert(newindex, item);
+      //определяем правильный порядок для всего листа
+      for (int i = 0; i < tasksList.length; i++) {
+        tasksList[i].order = i;
+      }
     });
   }
 
@@ -228,10 +223,10 @@ class _ToDoListState extends State<ToDoList> {
                       setState(() {
                         tasksList.removeAt(index);
 
-                       // tasksList[index].order--;
-                         for (int i = index; i < tasksList.length; i++){
-                           tasksList[i].order--;
-                         }
+                        // tasksList[index].order--;
+                        for (int i = index; i < tasksList.length; i++) {
+                          tasksList[i].order--;
+                        }
                       });
 
                       // Then show a snackbar.
@@ -265,4 +260,7 @@ class _ToDoListState extends State<ToDoList> {
       return Center();
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
