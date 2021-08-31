@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:synccards/database/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'add_category_dialog.dart';
+import '../../src/blocs/todo.dart';
+import 'index.dart';
 
 class CategoriesDrawer extends StatelessWidget {
   @override
@@ -16,14 +16,14 @@ class CategoriesDrawer extends StatelessWidget {
               'Todo-List Demo with moor',
               style: Theme.of(context)
                   .textTheme
-                  .subtitle1
-                  ?.copyWith(color: Colors.white),
+                  .subtitle1!
+                  .copyWith(color: Colors.white),
             ),
-            decoration: const BoxDecoration(color: Colors.orange),
+            decoration: BoxDecoration(color: Colors.orange),
           ),
           Flexible(
             child: StreamBuilder<List<CategoryWithActiveInfo>>(
-              stream: Provider.of<TodoAppBloc>(context).categories,
+              stream: BlocProvider.of<TodoAppBloc>(context).categories,
               builder: (context, snapshot) {
                 final categories = snapshot.data ?? <CategoryWithActiveInfo>[];
 
@@ -36,7 +36,7 @@ class CategoriesDrawer extends StatelessWidget {
               },
             ),
           ),
-          const Spacer(),
+          Spacer(),
           Row(
             children: <Widget>[
               FlatButton(
@@ -71,7 +71,7 @@ class _CategoryDrawerEntry extends StatelessWidget {
     }
 
     final isActive = entry.isActive;
-    final bloc = Provider.of<TodoAppBloc>(context);
+    final bloc = BlocProvider.of<TodoAppBloc>(context);
 
     final rowContent = [
       Text(
@@ -82,7 +82,7 @@ class _CategoryDrawerEntry extends StatelessWidget {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8.0),
         child: Text('${entry.categoryWithCount?.count} entries'),
       ),
     ];
@@ -90,7 +90,7 @@ class _CategoryDrawerEntry extends StatelessWidget {
     // also show a delete button if the category can be deleted
     if (category != null) {
       rowContent.addAll([
-        const Spacer(),
+        Spacer(),
         IconButton(
           icon: const Icon(Icons.delete_outline),
           color: Colors.red,
@@ -102,7 +102,7 @@ class _CategoryDrawerEntry extends StatelessWidget {
                   title: const Text('Delete'),
                   content: Text('Really delete category $title?'),
                   actions: <Widget>[
-                    TextButton(
+                    FlatButton(
                       child: const Text('Cancel'),
                       onPressed: () {
                         Navigator.pop(context, false);
@@ -130,7 +130,7 @@ class _CategoryDrawerEntry extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Material(
         color: isActive
             ? Colors.orangeAccent.withOpacity(0.3)
@@ -142,7 +142,7 @@ class _CategoryDrawerEntry extends StatelessWidget {
             Navigator.pop(context); // close the navigation drawer
           },
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               children: rowContent,
             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:synccards/database/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:synccards/libMoor/src/blocs/todo.dart';
 
 class AddCategoryDialog extends StatefulWidget {
   @override
@@ -14,12 +14,12 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8.0),
               child: Text(
                 'Add a category',
                 style: Theme.of(context).textTheme.headline6,
@@ -28,7 +28,7 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
             TextField(
               controller: _controller,
               autofocus: true,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Name of the category',
               ),
               onSubmitted: (_) => _addEntry(),
@@ -50,8 +50,7 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
 
   void _addEntry() {
     if (_controller.text.isNotEmpty) {
-      Provider.of<TodoAppBloc>(context, listen: false)
-          .addCategory(_controller.text);
+      BlocProvider.of<TodoAppBloc>(context).addCategory(_controller.text);
       Navigator.of(context).pop();
     }
   }
