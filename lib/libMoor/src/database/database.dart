@@ -1,9 +1,7 @@
 // don't import moor_web.dart or moor_flutter/moor_flutter.dart in shared code
 import 'package:moor/moor.dart';
 import 'package:undo/undo.dart';
-
 import 'db_utils.dart';
-
 export 'database/shared.dart';
 
 part 'database.g.dart';
@@ -49,6 +47,7 @@ class EntryWithCategory {
     '_resetCategory': 'UPDATE todos SET category = NULL WHERE category = ?',
   },
 )
+
 class Database extends _$Database {
   Database(QueryExecutor e) : super(e);
   final cs = ChangeStack();
@@ -107,7 +106,9 @@ class Database extends _$Database {
       final hasId = row.data['id'] != null;
 
       return CategoryWithCount(
-        hasId ? Category.fromData(row.data, this) : Category(id: 11, description: "description"),
+        hasId
+            ? Category.fromData(row.data, this)
+            : Category(id: 11, description: "description"),
         row.readInt('amount'),
       );
     }).watch();
@@ -161,7 +162,7 @@ class Database extends _$Database {
       cs,
       categories,
       CategoriesCompanion(description: Value(description)),
-    ) ;
+    );
   }
 
   Future deleteCategory(Category category) {

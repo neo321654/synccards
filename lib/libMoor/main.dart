@@ -19,8 +19,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    //todo RepositoryProvider - какой-то провайдер надо разобраться
     return RepositoryProvider<Database>(
       create: (context) => constructDb(),
+      //todo BlocProvider - блок провайдер является родителем всего приложения
       child: BlocProvider<TodoAppBloc>(
         create: (context) {
           final db = RepositoryProvider.of<Database>(context);

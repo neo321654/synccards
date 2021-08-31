@@ -1,3 +1,4 @@
+//@dart=2.9
 import 'package:moor/moor.dart';
 import 'package:undo/undo.dart';
 
@@ -9,7 +10,7 @@ extension TableUtils on GeneratedDatabase {
   ) async {
     final _change = Change(
       val,
-      () async => await this.delete(table).delete(val),
+      () async => await this.delete(table).delete(val) as TableInfo<Table,dynamic>,
       (old) async => await this.into(table).insert(old),
     );
     await cs.add(_change);
@@ -33,7 +34,11 @@ extension TableUtils on GeneratedDatabase {
     Table table,
     Insertable val,
   ) async {
-    final oldVal = await (select(table)..whereSamePrimaryKey(val)).getSingle();
+    // final oldVal = await (select(table)..whereSamePrimaryKey(val)).getSingle();
+
+    //todo здесь надо сохранить старое значение , выполнить нормальный select
+   // final oldVal = await (select(table)..whereSamePrimaryKey(val)).getSingle();
+    final oldVal = "oldVal";
     final _change = Change(
       oldVal,
       () async => await this.update(table).replace(val),
