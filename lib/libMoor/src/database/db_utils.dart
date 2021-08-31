@@ -1,37 +1,36 @@
-//@dart=2.9
 import 'package:moor/moor.dart';
 import 'package:undo/undo.dart';
 
 extension TableUtils on GeneratedDatabase {
   Future<void> deleteRow(
     ChangeStack cs,
-    Table table,
+    TableInfo table,
     Insertable val,
   ) async {
     final _change = Change(
       val,
-      () async => await this.delete(table).delete(val) as TableInfo<Table,dynamic>,
-      (old) async => await this.into(table).insert(old),
+      () async => await this.delete(table).delete(val) ,
+      (Insertable old) async => await this.into(table).insert(old),
     );
-    await cs.add(_change);
+     cs.add(_change);
   }
 
   Future<dynamic> insertRow(
     ChangeStack cs,
-    Table table,
+    TableInfo table,
     Insertable val,
   ) async {
     final _change = Change(
       val,
       () async => await this.into(table).insert(val),
-      (val) async => await this.delete(table).delete(val),
+      (Insertable val) async => await this.delete(table).delete(val),
     );
-    await cs.add(_change);
+     cs.add(_change);
   }
 
   Future<void> updateRow(
     ChangeStack cs,
-    Table table,
+    TableInfo table,
     Insertable val,
   ) async {
     // final oldVal = await (select(table)..whereSamePrimaryKey(val)).getSingle();
@@ -42,14 +41,14 @@ extension TableUtils on GeneratedDatabase {
     final _change = Change(
       oldVal,
       () async => await this.update(table).replace(val),
-      (old) async => await this.update(table).replace(old),
+          (val) async => await this.update(table).replace(val as Insertable),
     );
-    await cs.add(_change);
+     cs.add(_change);
   }
 }
 
-Value<T> addField<T>(T val, {T fallback}) {
-  Value<T> _fallback;
+Value<T> addField<T>(T? val, {T? fallback}) {
+ late Value<T> _fallback;
   if (fallback != null) {
     _fallback = Value<T>(fallback);
   }

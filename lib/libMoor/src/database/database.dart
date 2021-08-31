@@ -116,7 +116,7 @@ class Database extends _$Database {
 
   /// Watches all entries in the given [category]. If the category is null, all
   /// entries will be shown instead.
-  Stream<List<EntryWithCategory>> watchEntriesInCategory(Category category) {
+  Stream<List<EntryWithCategory>> watchEntriesInCategory(Category? category) {
     final query = select(todos).join(
         [leftOuterJoin(categories, categories.id.equalsExp(todos.category))]);
 

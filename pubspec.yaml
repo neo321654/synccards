@@ -73,6 +73,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - res/images/drawer_header_background.png
+    - res/images/sqlite3.dll
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

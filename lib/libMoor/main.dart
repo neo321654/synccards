@@ -7,7 +7,7 @@ import 'src/database/database.dart';
 import 'ui/home/screen.dart';
 
 void main() {
-  setTargetPlatformForDesktop();
+  setTargetPlatformForDesktop(platform: TargetPlatform.windows);
   runApp(MyApp());
 }
 
@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
     //todo RepositoryProvider - какой-то провайдер надо разобраться
     return RepositoryProvider<Database>(
       create: (context) => constructDb(),
-      //todo BlocProvider - блок провайдер является родителем всего приложения
+      //todo BlocProvider - блок провайдер является р
       child: BlocProvider<TodoAppBloc>(
         create: (context) {
           final db = RepositoryProvider.of<Database>(context);
