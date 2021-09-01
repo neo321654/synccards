@@ -1,26 +1,21 @@
-import 'dart:ffi';
-import 'dart:io';
 
+// import 'dart:io';
+// import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'src/blocs/todo.dart';
 import 'src/database/database.dart';
 import 'ui/home/screen.dart';
-import 'package:sqlite3/open.dart';
-
+// import 'package:sqlite3/open.dart';
+import 'plugins/desktop/desktop.dart';
 void main() {
-  //setTargetPlatformForDesktop(platform: TargetPlatform.windows);
-  //open.overrideFor(OperatingSystem.windows, _openOnLinux);
+  //todo разобраться с этим хитрым методом он сам выбырает платформу и для неё сам ищет базу
+  setTargetPlatformForDesktop();
+
 
   runApp(MyApp());
 }
-DynamicLibrary _openOnLinux() {
-  final scriptDir = File(Platform.script.toFilePath()).parent;
- // final libraryNextToScript = File('${scriptDir.path}/lib/sqlite3.dll');
-  //final libraryNextToScript =File("C:\\Users\\neo32\\IdeaProjects\\synccards\\lib\\sqlite3.dll");
-//  return DynamicLibrary.open(libraryNextToScript.path);
-  return DynamicLibrary.open("C:/Users/neo32/IdeaProjects/synccards/lib/sqlite3.dll");
-}
+
 
 
 class MyApp extends StatefulWidget {
