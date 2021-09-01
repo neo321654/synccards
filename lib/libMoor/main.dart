@@ -1,15 +1,27 @@
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'src/blocs/todo.dart';
-import 'plugins/desktop/desktop.dart';
 import 'src/database/database.dart';
 import 'ui/home/screen.dart';
+import 'package:sqlite3/open.dart';
 
 void main() {
-  setTargetPlatformForDesktop(platform: TargetPlatform.windows);
+  //setTargetPlatformForDesktop(platform: TargetPlatform.windows);
+  //open.overrideFor(OperatingSystem.windows, _openOnLinux);
+
   runApp(MyApp());
 }
+DynamicLibrary _openOnLinux() {
+  final scriptDir = File(Platform.script.toFilePath()).parent;
+ // final libraryNextToScript = File('${scriptDir.path}/lib/sqlite3.dll');
+  //final libraryNextToScript =File("C:\\Users\\neo32\\IdeaProjects\\synccards\\lib\\sqlite3.dll");
+//  return DynamicLibrary.open(libraryNextToScript.path);
+  return DynamicLibrary.open("C:/Users/neo32/IdeaProjects/synccards/lib/sqlite3.dll");
+}
+
 
 class MyApp extends StatefulWidget {
   @override
