@@ -14,7 +14,7 @@ class UserProvider {
     print(response);
     if (response.statusCode==200) {
       print("response == 200");
-      final List<dynamic> userJson = json.decode(response.body);
+      final List<dynamic> userJson =  json.decode(response.body);
       return userJson.map((json) => Task.fromJson(json)).toList();
     }else{
       print("response == exception");
@@ -24,7 +24,7 @@ class UserProvider {
   }
   Future <List<Task>> getMockUsers()async{
 
-    return new List<Task>.generate(20, (i) => Task(id: i,order: i ,description: "description description description description $i",name: "task name $i", additionalDescription: "additionalDescription additionalDescription additionalDescription $i"));
+    return new List<Task>.generate(20, (i) => Task(id: i,order: i ,description: "description description description descriptiondescription d$i",name: "task name $i", additionalDescription: "additionalDescription additionalDescription additionalDescription $i"));
 
 
   }

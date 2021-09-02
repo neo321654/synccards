@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:synccards/testingExamples/undoPubDev.dart';
-import 'pages/to_do_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'pages/to_do_page.dart';
 
 void main() {
-  runApp(new MaterialApp(
+  runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    localizationsDelegates: [
+    localizationsDelegates: const [
       AppLocalizations.delegate,
       GlobalMaterialLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,
     ],
 
-    supportedLocales: [
+    supportedLocales: const[
       //todo добавить перевод с русского на английский в файл app_en.ard
       // Locale('en', ''),
       Locale('ru', ''),
@@ -23,7 +23,7 @@ void main() {
     //title: AppLocalizations.of(context)!.helloWorld,
     theme: ThemeData(
         primarySwatch: Colors.indigo,
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           // center text style
             caption: TextStyle(color: Colors.white),
             // Side text style

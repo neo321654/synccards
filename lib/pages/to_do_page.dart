@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:synccards/bloc/color_bloc.dart';
 import 'package:synccards/model/bloc/user_bloc.dart';
 import 'package:synccards/model/bloc/user_event.dart';
@@ -8,9 +7,9 @@ import 'package:synccards/model/bloc/user_state.dart';
 import 'package:synccards/services/user_repository.dart';
 import 'package:synccards/widget/drawer.dart';
 import 'package:synccards/utils/utilsFunctions.dart';
-import 'package:synccards/widget/list_item.dart';
 import 'package:synccards/widget/my_voluem_button.dart';
 
+import '../responsive_layout.dart';
 import 'detail_item_page.dart';
 import 'flutter_bloc_page.dart';
 
@@ -45,11 +44,11 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print(word(context).helloWorld);
-
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
+    return ResponsiveLayout(
+      tiny: Container(),
+      phone: DefaultTabController(
+        length: 3,
+        child: Scaffold(
           drawer: AppDrawer(),
           appBar: AppBar(
             title: Column(
@@ -90,7 +89,7 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
                   UsersRepository usersRepository = UsersRepository();
                   return UserBloc(usersRepository: usersRepository);
                 },
-                child: ToDoList(),
+                child: const ToDoList(),
               ),
               BlocProvider<UserBloc>(
                 create: (context) {
@@ -116,7 +115,103 @@ class _ToDoPageState extends State<ToDoPage> with TickerProviderStateMixin {
               turns: _animation,
               child: Icon(Icons.add),
             ),
+          ),
+          bottomNavigationBar: ResponsiveLayout.isPhone(context)
+              ? BottomNavigationBar(
+                  currentIndex: 0,
+                  items: [
+                    BottomNavigationBarItem(icon: Icon(Icons.add), label: "1"),
+                    BottomNavigationBarItem(icon: Icon(Icons.add), label: "1"),
+                    BottomNavigationBarItem(icon: Icon(Icons.add), label: "1"),
+                  ],
+                  onTap: (index) {
+                    setState(() {});
+                  },
+                )
+              : SizedBox(),
+        ),
+      ),
+      tablet: Row(
+        children: [
+          Expanded(
+              child: BlocProvider<UserBloc>(
+            create: (context) {
+              UsersRepository usersRepository = UsersRepository();
+              return UserBloc(usersRepository: usersRepository);
+            },
+            child: const ToDoList(),
           )),
+          Expanded(
+            child: BlocProvider<UserBloc>(
+              create: (context) {
+                UsersRepository usersRepository = UsersRepository();
+                return UserBloc(usersRepository: usersRepository);
+              },
+              child: const ToDoList(),
+            ),
+          ),
+        ],
+      ),
+      largeTablet: Row(
+        children: [
+          Expanded(
+              child: BlocProvider<UserBloc>(
+            create: (context) {
+              UsersRepository usersRepository = UsersRepository();
+              return UserBloc(usersRepository: usersRepository);
+            },
+            child: const ToDoList(),
+          )),
+          Expanded(
+            child: BlocProvider<UserBloc>(
+              create: (context) {
+                UsersRepository usersRepository = UsersRepository();
+                return UserBloc(usersRepository: usersRepository);
+              },
+              child: const ToDoList(),
+            ),
+          ),
+          Expanded(
+            child: BlocProvider<UserBloc>(
+              create: (context) {
+                UsersRepository usersRepository = UsersRepository();
+                return UserBloc(usersRepository: usersRepository);
+              },
+              child: const ToDoList(),
+            ),
+          ),
+        ],
+      ),
+      computer: Row(
+        children: [
+          Expanded(
+              child: BlocProvider<UserBloc>(
+            create: (context) {
+              UsersRepository usersRepository = UsersRepository();
+              return UserBloc(usersRepository: usersRepository);
+            },
+            child: const ToDoList(),
+          )),
+          Expanded(
+            child: BlocProvider<UserBloc>(
+              create: (context) {
+                UsersRepository usersRepository = UsersRepository();
+                return UserBloc(usersRepository: usersRepository);
+              },
+              child: const ToDoList(),
+            ),
+          ),
+          Expanded(
+            child: BlocProvider<UserBloc>(
+              create: (context) {
+                UsersRepository usersRepository = UsersRepository();
+                return UserBloc(usersRepository: usersRepository);
+              },
+              child: const ToDoList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -128,7 +223,8 @@ class ToDoList extends StatefulWidget {
   _ToDoListState createState() => _ToDoListState();
 }
 
-class _ToDoListState extends State<ToDoList> with AutomaticKeepAliveClientMixin {
+class _ToDoListState extends State<ToDoList>
+    with AutomaticKeepAliveClientMixin {
   List tasksList = [];
 
   void reorderData(int oldindex, int newindex) {

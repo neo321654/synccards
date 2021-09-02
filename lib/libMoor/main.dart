@@ -3,11 +3,12 @@
 // import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// import 'package:sqlite3/open.dart';
+import 'plugins/desktop/desktop.dart';
 import 'src/blocs/todo.dart';
 import 'src/database/database.dart';
 import 'ui/home/screen.dart';
-// import 'package:sqlite3/open.dart';
-import 'plugins/desktop/desktop.dart';
 void main() {
   //todo разобраться с этим хитрым методом он сам выбырает платформу и для неё сам ищет базу
   setTargetPlatformForDesktop();
